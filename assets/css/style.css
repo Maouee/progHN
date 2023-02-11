@@ -1,0 +1,51 @@
+body {
+	background-color: lightgrey;
+  	max-width: 1000px;
+  	margin: 0 auto;
+}
+
+#page{
+	border: #008080 solid 7px;
+	box-shadow: 3px 3px 3px;
+	background-color: white;
+	padding: 15px;
+	margin-top: 35px;
+	margin-left: 35px;
+	margin-right: 35px;
+	margin-bottom: 0px;
+}
+
+.entete {
+	text-align: center;
+}
+
+h1 {
+	font-size: 2.5rem;
+	text-shadow: 2px 3px 3px rgba(0,0,0,0.3);
+}
+
+h2 {
+	font-size: 1.3rem;
+}
+
+h1, h2{
+	font-family: "Papyrus", "Gill Sans", sans-serif;
+}
+
+p, table, ol, thead{
+	font-size: 14px;
+	font-family: "Gill Sans", sans-serif;
+}
+
+footer {
+	text-align: center;
+	border-top: none;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.titregras {
+	font-style: bold;
+}
