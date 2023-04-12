@@ -49,3 +49,43 @@ footer {
 .titregras {
 	font-style: bold;
 }
+
+
+@@ -13,6 +13,10 @@ h2 {
+    font-size: 2rem;
+}
+
+table, th, td {
+    border : 1px solid black;
+}
+
+#page {
+    margin: auto; /* centrer */
+    background-color: rgb(250, 250, 250);
+}
+
+#Global {
+	margin-right: auto; 
+	margin-left: auto; 
+	width: 80%; 
+	border: 3px; 
+	display:table;
+}
+
+#Global #fileDisplayArea {
+	float:left;
+	width:48%;
+	background: #FFF;
+	font-size:0.6em;
+	height:200px;
+	overflow:scroll;
+}
+#Global #page-analysis {
+	margin-left:52%;
+	background: #FFF;
+	height:200px;
+	overflow:scroll;
+}
+
+
+
