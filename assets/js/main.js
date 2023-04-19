@@ -1,4 +1,5 @@
 let text_tokens = [];
+let text_lines = [];
 
 
 window.onload = function() {
@@ -25,7 +26,10 @@ window.onload = function() {
             reader.onload = function(e) {
                 fileDisplayArea.innerText = reader.result;
                 segmentation();
-                document.getElementById("logger").innerHTML = '<span class="infolog">Fichier chargé avec succès, ' + text_tokens.length + ' tokens dans le texte.</span>';
+                
+                if (text_tokens.length != 0) {
+                    document.getElementById("logger").innerHTML = '<span class="infolog">Fichier chargé avec succès, ' + text_tokens.length + ' tokens dans le texte et ' + text_lines.length + ' lignes non vides.</span>';
+                }
             }
 
             // on lit concrètement le fichier.
@@ -33,6 +37,8 @@ window.onload = function() {
             reader.readAsText(file);
         } else { // pas un fichier texte : message d'erreur.
             fileDisplayArea.innerText = "";
+            text_tokens = [];
+            text_lines = [];
             document.getElementById("logger").innerHTML = '<span class="errorlog">Type de fichier non supporté !</span>';
         }
     });
@@ -57,7 +63,12 @@ function afficheCacheAide() {
 function segmentation() {
     let text = document.getElementById("fileDisplayArea").innerText;
     let delim = document.getElementById("delimID").value;
-    let display = document.getElementById("page-analysis");
+    
+
+    if (delim === "") {
+        document.getElementById("logger").innerHTML = '<span class="errorlog">Aucun délimiteur donné !</span>'
+        return;
+    }
 
     let regex_delim = new RegExp(
         "["
@@ -71,6 +82,8 @@ function segmentation() {
     let tokens_tmp = text.split(regex_delim);
     text_tokens = tokens_tmp.filter(x => x.trim() != ''); // on s'assure de ne garder que des tokens "non vides"
 
+    text_lines = text.split(new RegExp("[\\r\\n]+")).filter(x => x.trim() != '');
+
     // global_var_tokens = tokens; // décommenter pour vérifier l'état des tokens dans la console développeurs sur le navigateur
     // display.innerHTML = tokens.join(" ");
 }
@@ -79,6 +92,11 @@ function segmentation() {
 function dictionnaire() {
     let comptes = new Map();
     let display = document.getElementById("page-analysis");
+
+    if (text_tokens.length === 0) {
+        document.getElementById("logger").innerHTML = '<span class="errorlog">Il faut d\'abord charger un fichier !</span>';
+        return;
+    }
 
     for (let token of text_tokens) {
         comptes.set(token, (comptes.get(token) ?? 0) + 1);
@@ -129,5 +147,51 @@ function dictionnaire() {
         cellule_compte.innerHTML = compte;
     }
 
+    display.innerHTML = "";
     display.appendChild(table);
+
+        document.getElementById("logger").innerHTML = '';
 }
+
+
+function grep() {
+    let pole = document.getElementById("poleID").value.trim();
+    let display = document.getElementById("page-analysis");
+
+    if (text_lines.length === 0) {
+        // pas de lignes: erreur
+        document.getElementById("logger").innerHTML = '<span class="errorlog">Il faut d\'abord charger un fichier !</span>';
+        return;
+    }
+
+    if (pole === '') {
+        // pas de pôle: erreur
+        document.getElementById("logger").innerHTML = '<span class="errorlog">Le pôle n\'est pas renseigné !</span>';
+        return;
+    }
+    let pole_regex = new RegExp('(' + pole + ')', "g");
+
+    display.innerHTML = "";
+    for (let line of text_lines) {
+        if (line.search(pole_regex) != -1) {
+            let paragraph = document.createElement("p");
+            paragraph.innerHTML = line.replaceAll(pole_regex, '<span style="color:red;">$1</span>')
+            display.appendChild(paragraph);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
